@@ -62,7 +62,7 @@ init_database()
 
 # GitHub configuration
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN", "")
-GITHUB_RAW_BASE = os.getenv("GITHUB_RAW_BASE", "https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/drafts")
+GITHUB_RAW_BASE = os.getenv("GITHUB_RAW_BASE", "https://raw.githubusercontent.com/DignityAI/dignity-ai/main/drafts")
 CACHE_DURATION = 300  # 5 minutes cache
 
 # Simple in-memory cache
@@ -85,6 +85,25 @@ def cache_content(func):
             logging.debug("Serving content from cache")
         return content_cache['data']
     return wrapper
+
+def get_files_from_github_folder(folder_name):
+    """Get actual files from GitHub folder using API"""
+    try:
+        api_url = f"https://api.github.com/repos/DignityAI/dignity-ai/contents/drafts/{folder_name}"
+        headers = {}
+        if GITHUB_TOKEN:
+            headers['Authorization'] = f'token {GITHUB_TOKEN}'
+        
+        response = requests.get(api_url, headers=headers, timeout=10)
+        if response.status_code == 200:
+            files = response.json()
+            return [f"{folder_name}/{file['name']}" for file in files if file['name'].endswith('.md')]
+        else:
+            logging.warning(f"Failed to get files from {folder_name}: {response.status_code}")
+            return []
+    except Exception as e:
+        logging.error(f"Error getting files from {folder_name}: {e}")
+        return []
 
 def parse_markdown_content(content):
     """Parse markdown content to HTML and save to database"""
@@ -181,34 +200,15 @@ def fetch_latest_content():
             'sdoh_analysis': []
         }
         
-# Get actual files from your GitHub folders
-def get_files_from_github_folder(folder_name):
-    """Get actual files from GitHub folder using API"""
-    try:
-        api_url = f"https://api.github.com/repos/DignityAI/dignity-ai/contents/drafts/{folder_name}"
-        headers = {}
-        if GITHUB_TOKEN:
-            headers['Authorization'] = f'token {GITHUB_TOKEN}'
+        # Use your actual generated files
+        content_files = {
+            'case_studies': get_files_from_github_folder('case-studies'),
+            'news_articles': get_files_from_github_folder('news-articles'), 
+            'blog_posts': get_files_from_github_folder('blog-posts'),
+            'power_mapping': get_files_from_github_folder('power-mapping'),
+            'sdoh_analysis': get_files_from_github_folder('sdoh-analysis')
+        }
         
-        response = requests.get(api_url, headers=headers, timeout=10)
-        if response.status_code == 200:
-            files = response.json()
-            return [f"{folder_name}/{file['name']}" for file in files if file['name'].endswith('.md')]
-        else:
-            logging.warning(f"Failed to get files from {folder_name}: {response.status_code}")
-            return []
-    except Exception as e:
-        logging.error(f"Error getting files from {folder_name}: {e}")
-        return []
-
-# Use your actual generated files
-content_files = {
-    'case_studies': get_files_from_github_folder('case-studies'),
-    'news_articles': get_files_from_github_folder('news-articles'), 
-    'blog_posts': get_files_from_github_folder('blog-posts'),
-    'power_mapping': get_files_from_github_folder('power-mapping'),
-    'sdoh_analysis': get_files_from_github_folder('sdoh-analysis')
-}     
         # Fetch content for each category
         for category, files in content_files.items():
             for file_path in files:
