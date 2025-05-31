@@ -1,0 +1,481 @@
+/* Custom CSS for Content Aggregator */
+
+/* Root variables for DignityAI Liberation theming */
+:root {
+    --liberation-gold: #C8963E;
+    --liberation-bronze: #B8802A;
+    --liberation-dark: #1a1a1a;
+    --primary-gradient: linear-gradient(135deg, var(--liberation-gold) 0%, var(--liberation-bronze) 100%);
+    --content-max-height: 200px;
+    --transition-speed: 0.3s;
+    --border-radius: 0.5rem;
+    --shadow-light: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-heavy: 0 8px 16px rgba(0, 0, 0, 0.2);
+    --liberation-shadow: 0 4px 12px rgba(200, 150, 62, 0.3);
+}
+
+/* Body and layout - Liberation focused */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    transition: all var(--transition-speed) ease;
+    background: var(--liberation-dark);
+}
+
+/* Liberation typography */
+.fw-bold, .fw-semibold {
+    font-weight: 700 !important;
+}
+
+.text-liberation {
+    color: var(--liberation-gold) !important;
+}
+
+.bg-liberation {
+    background-color: var(--liberation-gold) !important;
+}
+
+.border-liberation {
+    border-color: var(--liberation-gold) !important;
+}
+
+/* Loading overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(2px);
+}
+
+/* Enhanced card styles - Liberation focused */
+.card {
+    border: 1px solid var(--liberation-gold);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    transition: all var(--transition-speed) ease;
+    overflow: hidden;
+    background: rgba(26, 26, 26, 0.95);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--liberation-shadow);
+    border-color: var(--liberation-bronze);
+}
+
+.card.border-warning {
+    border-color: var(--liberation-gold) !important;
+}
+
+.card .bg-warning {
+    background-color: var(--liberation-gold) !important;
+}
+
+.card-header {
+    border-bottom: 1px solid var(--bs-border-color);
+    font-weight: 600;
+}
+
+/* Content preview styling */
+.content-preview {
+    max-height: var(--content-max-height);
+    overflow: hidden;
+    position: relative;
+    transition: max-height var(--transition-speed) ease;
+}
+
+.content-preview::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(to bottom, transparent, var(--bs-body-bg));
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity var(--transition-speed) ease;
+}
+
+.content-preview[style*="max-height: none"]::after {
+    opacity: 0;
+}
+
+/* Text truncation utility */
+.text-truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Navigation enhancements - Liberation style */
+.navbar-brand {
+    font-weight: 900;
+    font-size: 1.75rem;
+    transition: all var(--transition-speed) ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+    color: var(--liberation-bronze) !important;
+}
+
+.nav-link {
+    transition: all var(--transition-speed) ease;
+    border-radius: var(--border-radius);
+    margin: 0 0.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.nav-link:hover {
+    background-color: rgba(200, 150, 62, 0.2);
+    transform: translateY(-1px);
+    color: var(--liberation-gold) !important;
+}
+
+.nav-link.active {
+    background-color: var(--liberation-gold);
+    color: black !important;
+    font-weight: 700;
+}
+
+/* Button enhancements - Liberation style */
+.btn {
+    border-radius: var(--border-radius);
+    transition: all var(--transition-speed) ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--liberation-shadow);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-warning {
+    background-color: var(--liberation-gold);
+    border-color: var(--liberation-gold);
+    color: black;
+    font-weight: 700;
+}
+
+.btn-warning:hover {
+    background-color: var(--liberation-bronze);
+    border-color: var(--liberation-bronze);
+    color: black;
+}
+
+.btn-outline-warning {
+    border-color: var(--liberation-gold);
+    color: var(--liberation-gold);
+}
+
+.btn-outline-warning:hover {
+    background-color: var(--liberation-gold);
+    border-color: var(--liberation-gold);
+    color: black;
+}
+
+/* Badge styling */
+.badge {
+    border-radius: var(--border-radius);
+    font-weight: 500;
+}
+
+/* Search highlighting */
+.search-highlight {
+    padding: 0.1rem 0.2rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .display-6 {
+        font-size: 1.5rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn-sm {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .card-header h5 {
+        font-size: 1rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Content animations */
+.card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Loading spinner */
+.spinner-border {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Refresh button animation */
+.btn .fa-sync-alt {
+    transition: transform var(--transition-speed) ease;
+}
+
+.btn:hover .fa-sync-alt {
+    transform: rotate(180deg);
+}
+
+/* Status indicators */
+.status-online {
+    color: var(--bs-success);
+}
+
+.status-offline {
+    color: var(--bs-danger);
+}
+
+.status-loading {
+    color: var(--bs-warning);
+}
+
+/* Enhanced footer - Liberation style */
+footer {
+    background: linear-gradient(135deg, var(--liberation-dark) 0%, #0a0a0a 100%);
+    border-top: 2px solid var(--liberation-gold);
+}
+
+footer .text-warning {
+    color: var(--liberation-gold) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bs-body-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bs-secondary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--bs-primary);
+}
+
+/* Focus states for accessibility */
+.btn:focus,
+.form-control:focus,
+.nav-link:focus {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .card {
+        border: 2px solid var(--bs-border-color);
+    }
+    
+    .btn {
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .btn,
+    .card-footer,
+    .loading-overlay {
+        display: none !important;
+    }
+    
+    .card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .content-preview {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+}
+
+/* Custom utility classes - Liberation theme */
+.bg-gradient-primary {
+    background: var(--primary-gradient);
+}
+
+.bg-gradient-dark {
+    background: linear-gradient(135deg, var(--liberation-dark) 0%, #2a2a2a 100%);
+}
+
+.text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.text-warning {
+    color: var(--liberation-gold) !important;
+}
+
+.border-gradient {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--bs-body-bg), var(--bs-body-bg)) padding-box,
+                var(--primary-gradient) border-box;
+}
+
+/* Liberation-specific classes */
+.liberation-header {
+    background: var(--primary-gradient);
+    color: black;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.liberation-card {
+    background: rgba(26, 26, 26, 0.95);
+    border: 2px solid var(--liberation-gold);
+    box-shadow: var(--liberation-shadow);
+}
+
+.liberation-text {
+    color: var(--liberation-gold);
+    font-weight: 600;
+}
+
+.power-fist {
+    color: var(--liberation-gold);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Content-specific enhancements */
+.content-preview h1,
+.content-preview h2,
+.content-preview h3,
+.content-preview h4,
+.content-preview h5,
+.content-preview h6 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.content-preview p {
+    margin-bottom: 0.75rem;
+}
+
+.content-preview ul,
+.content-preview ol {
+    margin-bottom: 0.75rem;
+    padding-left: 1.5rem;
+}
+
+.content-preview blockquote {
+    border-left: 4px solid var(--bs-primary);
+    padding-left: 1rem;
+    margin-left: 0;
+    font-style: italic;
+    background: rgba(var(--bs-primary-rgb), 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.content-preview code {
+    background: var(--bs-gray-100);
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+}
+
+.content-preview pre {
+    background: var(--bs-gray-100);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    overflow-x: auto;
+    font-size: 0.875rem;
+}
