@@ -181,35 +181,34 @@ def fetch_latest_content():
             'sdoh_analysis': []
         }
         
-        # Define file mappings for liberation intelligence content
-        content_files = {
-            'case_studies': [
-                'daily-analysis/systematic-racism-report.md',
-                'daily-analysis/police-violence-tracking.md',
-                'daily-analysis/housing-discrimination-study.md'
-            ],
-            'news_articles': [
-                'resistance-stories/community-victory-seattle.md',
-                'resistance-stories/tenant-organizing-chicago.md',
-                'resistance-stories/police-accountability-wins.md'
-            ],
-            'blog_posts': [
-                'organizing-intel/cross-city-strategies.md',
-                'organizing-intel/coalition-building-tactics.md',
-                'organizing-intel/digital-organizing-tools.md'
-            ],
-            'power_mapping': [
-                'power-mapping/city-council-influence.md',
-                'power-mapping/corporate-decision-makers.md',
-                'power-mapping/grassroots-networks.md'
-            ],
-            'sdoh_analysis': [
-                'cross-city-intel/national-trends.md',
-                'cross-city-intel/regional-patterns.md',
-                'cross-city-intel/policy-comparisons.md'
-            ]
-        }
+# Get actual files from your GitHub folders
+def get_files_from_github_folder(folder_name):
+    """Get actual files from GitHub folder using API"""
+    try:
+        api_url = f"https://api.github.com/repos/DignityAI/dignity-ai/contents/drafts/{folder_name}"
+        headers = {}
+        if GITHUB_TOKEN:
+            headers['Authorization'] = f'token {GITHUB_TOKEN}'
         
+        response = requests.get(api_url, headers=headers, timeout=10)
+        if response.status_code == 200:
+            files = response.json()
+            return [f"{folder_name}/{file['name']}" for file in files if file['name'].endswith('.md')]
+        else:
+            logging.warning(f"Failed to get files from {folder_name}: {response.status_code}")
+            return []
+    except Exception as e:
+        logging.error(f"Error getting files from {folder_name}: {e}")
+        return []
+
+# Use your actual generated files
+content_files = {
+    'case_studies': get_files_from_github_folder('case-studies'),
+    'news_articles': get_files_from_github_folder('news-articles'), 
+    'blog_posts': get_files_from_github_folder('blog-posts'),
+    'power_mapping': get_files_from_github_folder('power-mapping'),
+    'sdoh_analysis': get_files_from_github_folder('sdoh-analysis')
+}     
         # Fetch content for each category
         for category, files in content_files.items():
             for file_path in files:
