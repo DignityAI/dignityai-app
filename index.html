@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+
+{% block title %}DignityAI - Liberation Intelligence Platform{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Values Declaration Box -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-warning bg-gradient-dark">
+                <div class="card-body text-center py-4">
+                    <h2 class="text-warning fw-bold mb-3">
+                        <i class="fas fa-fist-raised me-2"></i>
+                        🎯 DIGNITYAI - LIBERATION INTELLIGENCE
+                    </h2>
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <strong class="text-warning">Framework:</strong> Systematic racism analysis for community organizing
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <strong class="text-warning">Serves:</strong> Grassroots organizers building community power
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <strong class="text-warning">Rejects:</strong> The myth of neutrality - explicitly pro-liberation
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="text-center">
+                <h1 class="display-4 mb-3 fw-bold">
+                    <i class="fas fa-fist-raised text-warning me-3"></i>
+                    DignityAI
+                </h1>
+                <p class="lead text-warning fw-semibold mb-2">
+                    Liberation Intelligence Platform
+                </p>
+                <p class="text-muted">
+                    Daily systematic racism analysis for community organizing
+                </p>
+                <div class="row text-center mt-4">
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="card border-warning bg-dark">
+                            <div class="card-body">
+                                <h3 class="text-warning">{{ content.case_studies|length }}</h3>
+                                <small class="text-light">Daily Analysis</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="card border-warning bg-dark">
+                            <div class="card-body">
+                                <h3 class="text-warning">{{ content.news_articles|length }}</h3>
+                                <small class="text-light">Resistance Stories</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="card border-warning bg-dark">
+                            <div class="card-body">
+                                <h3 class="text-warning">{{ content.blog_posts|length }}</h3>
+                                <small class="text-light">Organizing Intel</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 mb-3">
+                        <div class="card border-warning bg-dark">
+                            <div class="card-body">
+                                <h3 class="text-warning">{{ content.power_mapping|length }}</h3>
+                                <small class="text-light">Power Maps</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent content sections -->
+    <div class="row">
+        <!-- Daily Liberation Analysis -->
+        {% if content.case_studies %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-warning">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-analytics me-2"></i>
+                        Daily Liberation Analysis
+                    </h5>
+                    <a href="{{ url_for('case_studies') }}" class="btn btn-sm btn-dark">View All</a>
+                </div>
+                <div class="card-body">
+                    {% for study in content.case_studies[:3] %}
+                    <div class="mb-3 {% if not loop.last %}border-bottom pb-3{% endif %}">
+                        <h6 class="mb-1">{{ study.title }}</h6>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>{{ study.date }}
+                        </small>
+                        <p class="mt-2 mb-0 text-truncate-3">
+                            {{ study.content|striptags|truncate(120) }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Community Resistance Stories -->
+        {% if content.news_articles %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-warning">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-bullhorn me-2"></i>
+                        Community Resistance Stories
+                    </h5>
+                    <a href="{{ url_for('news') }}" class="btn btn-sm btn-dark">View All</a>
+                </div>
+                <div class="card-body">
+                    {% for article in content.news_articles[:3] %}
+                    <div class="mb-3 {% if not loop.last %}border-bottom pb-3{% endif %}">
+                        <h6 class="mb-1">{{ article.title }}</h6>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>{{ article.date }}
+                        </small>
+                        <p class="mt-2 mb-0 text-truncate-3">
+                            {{ article.content|striptags|truncate(120) }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Cross-City Organizing Intelligence -->
+        {% if content.blog_posts %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-warning">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-users me-2"></i>
+                        Cross-City Organizing Intelligence
+                    </h5>
+                    <a href="{{ url_for('blog_posts') }}" class="btn btn-sm btn-dark">View All</a>
+                </div>
+                <div class="card-body">
+                    {% for post in content.blog_posts[:3] %}
+                    <div class="mb-3 {% if not loop.last %}border-bottom pb-3{% endif %}">
+                        <h6 class="mb-1">{{ post.title }}</h6>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>{{ post.date }}
+                        </small>
+                        <p class="mt-2 mb-0 text-truncate-3">
+                            {{ post.content|striptags|truncate(120) }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Power Mapping Reports -->
+        {% if content.sdoh_analysis %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 border-warning">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-project-diagram me-2"></i>
+                        Power Mapping Reports
+                    </h5>
+                    <a href="{{ url_for('sdoh_analysis') }}" class="btn btn-sm btn-dark">View All</a>
+                </div>
+                <div class="card-body">
+                    {% for analysis in content.sdoh_analysis[:3] %}
+                    <div class="mb-3 {% if not loop.last %}border-bottom pb-3{% endif %}">
+                        <h6 class="mb-1">{{ analysis.title }}</h6>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>{{ analysis.date }}
+                        </small>
+                        <p class="mt-2 mb-0 text-truncate-3">
+                            {{ analysis.content|striptags|truncate(120) }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Empty state -->
+    {% if not content.case_studies and not content.news_articles and not content.blog_posts and not content.power_mapping and not content.sdoh_analysis %}
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-fist-raised fa-4x text-warning mb-4"></i>
+                <h3 class="text-warning fw-bold">Ready to Build Liberation Intelligence</h3>
+                <p class="text-muted">
+                    Connect your GitHub repository to start aggregating systematic racism analysis and community organizing intelligence.
+                    This platform explicitly serves liberation - not neutrality.
+                </p>
+                <button class="btn btn-warning fw-bold" onclick="refreshContent()">
+                    <i class="fas fa-sync-alt me-2"></i>Connect Liberation Data
+                </button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

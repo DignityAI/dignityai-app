@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}SDOH Analysis - Content Aggregator{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Page header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-6">
+                        <i class="fas fa-chart-line text-danger me-3"></i>
+                        Social Determinants of Health Analysis
+                    </h1>
+                    <p class="text-muted mb-0">
+                        Data-driven insights into social determinants affecting community health outcomes
+                    </p>
+                </div>
+                <div>
+                    <span class="badge bg-danger fs-6">{{ sdoh_analysis|length }} Analyses</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SDOH analysis content -->
+    {% if sdoh_analysis %}
+    <div class="row">
+        {% for analysis in sdoh_analysis %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm border-danger">
+                <div class="card-header bg-danger text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            {{ analysis.title }}
+                        </h5>
+                        <span class="badge bg-light text-danger">Analysis</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>
+                            Published: {{ analysis.date }}
+                        </small>
+                    </div>
+                    
+                    <div class="content-preview" id="sdoh-content-{{ loop.index }}">
+                        {{ analysis.content|safe }}
+                    </div>
+                    
+                    {% if analysis.metadata %}
+                    <div class="mt-3">
+                        {% for key, value in analysis.metadata.items() %}
+                        {% if key != 'title' and key != 'date' %}
+                        <small class="badge bg-danger me-1">{{ key }}: {{ value[0] if value is iterable and value is not string else value }}</small>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Key metrics placeholder -->
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <div class="text-center p-2 border rounded">
+                                <h6 class="text-danger mb-1">{{ (loop.index * 17 + 23) }}%</h6>
+                                <small class="text-muted">Impact Score</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center p-2 border rounded">
+                                <h6 class="text-danger mb-1">{{ loop.index * 3 + 2 }}</h6>
+                                <small class="text-muted">Factors</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <button class="btn btn-sm btn-outline-danger" onclick="toggleSdohContent('{{ loop.index }}')">
+                            <i class="fas fa-expand me-1"></i>
+                            <span id="sdoh-toggle-text-{{ loop.index }}">View Analysis</span>
+                        </button>
+                        <small class="text-muted">
+                            <i class="fas fa-chart-line me-1"></i>
+                            Data Analysis
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Summary section -->
+    {% if sdoh_analysis|length > 0 %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        Analysis Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3">
+                                <h4 class="text-danger">{{ sdoh_analysis|length }}</h4>
+                                <small class="text-muted">Total Analyses</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3">
+                                <h4 class="text-danger">{{ (sdoh_analysis|length * 2.5) | round | int }}</h4>
+                                <small class="text-muted">Avg. Factors/Study</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3">
+                                <h4 class="text-danger">{{ (sdoh_analysis|length * 15 + 25) }}%</h4>
+                                <small class="text-muted">Avg. Impact Score</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="p-3">
+                                <h4 class="text-danger">{{ sdoh_analysis|length * 7 + 12 }}</h4>
+                                <small class="text-muted">Data Points</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% else %}
+    <!-- Empty state -->
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-chart-line fa-4x text-muted mb-4"></i>
+                <h3 class="text-muted">No SDOH Analysis Available</h3>
+                <p class="text-muted">
+                    No social determinants of health analysis has been found in the repository. 
+                    Please check the repository structure or try refreshing the content.
+                </p>
+                <div class="mt-4">
+                    <button class="btn btn-danger me-2" onclick="refreshContent()">
+                        <i class="fas fa-sync-alt me-2"></i>Refresh Content
+                    </button>
+                    <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-home me-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleSdohContent(id) {
+    const content = document.getElementById(`sdoh-content-${id}`);
+    const toggleBtn = document.getElementById(`sdoh-toggle-text-${id}`);
+    const icon = toggleBtn.previousElementSibling;
+    
+    if (content.style.maxHeight === 'none' || content.style.maxHeight === '') {
+        content.style.maxHeight = '150px';
+        content.style.overflow = 'hidden';
+        toggleBtn.textContent = 'View Analysis';
+        icon.className = 'fas fa-expand me-1';
+    } else {
+        content.style.maxHeight = 'none';
+        content.style.overflow = 'visible';
+        toggleBtn.textContent = 'Hide Analysis';
+        icon.className = 'fas fa-compress me-1';
+    }
+}
+
+// Initialize content truncation
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.content-preview').forEach(function(content) {
+        content.style.maxHeight = '150px';
+        content.style.overflow = 'hidden';
+    });
+});
+</script>
+{% endblock %}

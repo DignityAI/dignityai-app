@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Case Studies - Content Aggregator{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <!-- Page header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-6">
+                        <i class="fas fa-file-medical text-primary me-3"></i>
+                        Case Studies
+                    </h1>
+                    <p class="text-muted mb-0">
+                        In-depth analysis and research studies from our repository
+                    </p>
+                </div>
+                <div>
+                    <span class="badge bg-primary fs-6">{{ case_studies|length }} Studies</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case studies content -->
+    {% if case_studies %}
+    <div class="row">
+        {% for study in case_studies %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">{{ study.title }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>
+                            Published: {{ study.date }}
+                        </small>
+                    </div>
+                    
+                    <div class="content-preview">
+                        {{ study.content|safe }}
+                    </div>
+                    
+                    {% if study.metadata %}
+                    <div class="mt-3">
+                        {% for key, value in study.metadata.items() %}
+                        {% if key != 'title' and key != 'date' %}
+                        <small class="badge bg-secondary me-1">{{ key }}: {{ value[0] if value is iterable and value is not string else value }}</small>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent">
+                    <button class="btn btn-sm btn-outline-primary" onclick="toggleContent('study-{{ loop.index }}')">
+                        <i class="fas fa-expand me-1"></i>
+                        <span id="toggle-text-study-{{ loop.index }}">Expand</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty state -->
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-file-medical fa-4x text-muted mb-4"></i>
+                <h3 class="text-muted">No Case Studies Available</h3>
+                <p class="text-muted">
+                    No case studies have been found in the repository. 
+                    Please check the repository structure or try refreshing the content.
+                </p>
+                <div class="mt-4">
+                    <button class="btn btn-primary me-2" onclick="refreshContent()">
+                        <i class="fas fa-sync-alt me-2"></i>Refresh Content
+                    </button>
+                    <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-home me-2"></i>Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleContent(id) {
+    const card = document.querySelector(`[onclick="toggleContent('${id}')"]`).closest('.card');
+    const content = card.querySelector('.content-preview');
+    const toggleBtn = card.querySelector(`#toggle-text-${id}`);
+    
+    if (content.style.maxHeight === 'none' || content.style.maxHeight === '') {
+        content.style.maxHeight = '200px';
+        content.style.overflow = 'hidden';
+        toggleBtn.textContent = 'Expand';
+        toggleBtn.previousElementSibling.className = 'fas fa-expand me-1';
+    } else {
+        content.style.maxHeight = 'none';
+        content.style.overflow = 'visible';
+        toggleBtn.textContent = 'Collapse';
+        toggleBtn.previousElementSibling.className = 'fas fa-compress me-1';
+    }
+}
+
+// Initialize content truncation
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.content-preview').forEach(function(content) {
+        content.style.maxHeight = '200px';
+        content.style.overflow = 'hidden';
+    });
+});
+</script>
+{% endblock %}

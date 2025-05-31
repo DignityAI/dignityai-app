@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Error - Content Aggregator{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Error Occurred
+                    </h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-times-circle fa-4x text-danger mb-3"></i>
+                        <h2 class="text-danger mb-3">
+                            {{ error_message or "An unexpected error occurred" }}
+                        </h2>
+                        
+                        {% if error_details %}
+                        <div class="alert alert-danger text-start" role="alert">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Error Details:
+                            </h6>
+                            <pre class="mb-0 small">{{ error_details }}</pre>
+                        </div>
+                        {% endif %}
+                        
+                        <p class="text-muted">
+                            We apologize for the inconvenience. This error has been logged and will be investigated.
+                        </p>
+                    </div>
+                    
+                    <!-- Troubleshooting section -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card bg-light">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-lightbulb me-1"></i>
+                                        Troubleshooting Steps
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled mb-0 text-start">
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Check your internet connection
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Verify GitHub repository configuration
+                                        </li>
+                                        <li class="mb-2">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Ensure repository is publicly accessible
+                                        </li>
+                                        <li class="mb-0">
+                                            <i class="fas fa-check text-success me-2"></i>
+                                            Try refreshing the content cache
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action buttons -->
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <button class="btn btn-primary" onclick="refreshContent()">
+                            <i class="fas fa-sync-alt me-2"></i>
+                            Refresh Content
+                        </button>
+                        <a href="{{ url_for('home') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-home me-2"></i>
+                            Back to Home
+                        </a>
+                        <button class="btn btn-outline-secondary" onclick="history.back()">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Go Back
+                        </button>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent text-center">
+                    <small class="text-muted">
+                        <i class="fas fa-clock me-1"></i>
+                        Error occurred at: {{ moment().format('YYYY-MM-DD HH:mm:ss') }}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Additional help section -->
+    <div class="row justify-content-center mt-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-question-circle me-1"></i>
+                        Need Additional Help?
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-3">If the error persists, here are some additional resources:</p>
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3">
+                                <i class="fas fa-book fa-2x text-info mb-2"></i>
+                                <h6>Documentation</h6>
+                                <p class="small text-muted">Check the setup documentation for configuration help</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3">
+                                <i class="fas fa-cog fa-2x text-warning mb-2"></i>
+                                <h6>Configuration</h6>
+                                <p class="small text-muted">Verify environment variables and GitHub settings</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3">
+                                <i class="fas fa-life-ring fa-2x text-success mb-2"></i>
+                                <h6>Support</h6>
+                                <p class="small text-muted">Contact technical support for assistance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Auto-refresh error page after 30 seconds if it's a temporary error
+document.addEventListener('DOMContentLoaded', function() {
+    const errorMessage = "{{ error_message|lower }}";
+    if (errorMessage.includes('network') || errorMessage.includes('timeout') || errorMessage.includes('connection')) {
+        setTimeout(function() {
+            if (confirm('Would you like to automatically retry loading the content?')) {
+                window.location.href = "{{ url_for('home') }}";
+            }
+        }, 30000);
+    }
+});
+</script>
+{% endblock %}
